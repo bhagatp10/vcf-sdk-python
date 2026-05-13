@@ -1,3 +1,6 @@
+# The dependency versions listed in this file only indicate the versions against which the samples were tested. 
+# These versions are not a strict requirement for installing the SDK.
+
 certifi==2026.1.4
 cffi==2.0.0
 charset-normalizer==3.4.4
