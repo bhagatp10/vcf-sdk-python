@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
 # Copyright (c) 2023-2026 Broadcom. All Rights Reserved.
-# Broadcom Confidential. The term "Broadcom" refers to Broadcom Inc.
-# and/or its subsidiaries.
 # The term "Broadcom" refers to Broadcom Inc.
+# and/or its subsidiaries.
 # SPDX-License-Identifier: Apache-2.0
 
 class ClientConfig:
