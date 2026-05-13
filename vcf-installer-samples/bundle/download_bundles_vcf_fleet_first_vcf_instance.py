@@ -1,15 +1,9 @@
-"""
-* *******************************************************
-* Copyright (c) 2025 Broadcom. All rights reserved.
-* The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
-* *******************************************************
-*
-* DISCLAIMER. THIS PROGRAM IS PROVIDED TO YOU "AS IS" WITHOUT
-* WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER ORAL OR WRITTEN,
-* EXPRESS OR IMPLIED. THE AUTHOR SPECIFICALLY DISCLAIMS ANY IMPLIED
-* WARRANTIES OR CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY,
-* NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
-"""
+#!/usr/bin/env python
+
+# Copyright (c) 2025-2026 Broadcom. All Rights Reserved.
+# The term "Broadcom" refers to Broadcom Inc.
+# and/or its subsidiaries.
+# SPDX-License-Identifier: Apache-2.0
 
 import argparse
 
@@ -105,11 +99,34 @@ latest_product_release_components = download_bundles_util.get_latest_product_rel
     client=client,
     sku="VCF",
     release_version=version_without_build_number,
-    product_release_components_names_to_include={"VRSLCM",  # VCF Operations Fleet Management
-                                                 "VROPS",  # VCF Operations
-                                                 "VCF_OPS_CLOUD_PROXY",  # VCF Operations Collector
-                                                 "VRA",  # VCF Automation
-                                                 "VCENTER",  # Components that comprise a VCF Instance
+    product_release_components_names_to_include={# VCF Services Platform
+                                                 "VSP",
+                                                 # VCF Fleet Lifecycle Management
+                                                 "VCF_FLEET_LCM",
+                                                 # VCF Fleet SDDC lifecycle management
+                                                 "VCF_SDDC_LCM",
+                                                 # SALT RAAS
+                                                 "VCF_SALT_RAAS",
+                                                 # SALT
+                                                 "VCF_SALT",
+                                                 # Telemetry Acceptor
+                                                 "TELEMETRY_ACCEPTOR",
+                                                 # Fleet Depot Service
+                                                 "DEPOT_SERVICE",
+                                                 # VCF Identity Broker
+                                                 "VIDB",
+                                                 # Migration Service Engine
+                                                 "VCF_SERVICE_VCD_MIGRATION_BACKEND",
+                                                 # License Server
+                                                 "VCF_LICENSE_SERVER",
+                                                 # VCF Operations
+                                                 "VROPS",
+                                                 # VCF Operations Collector
+                                                 "VCF_OPS_CLOUD_PROXY",
+                                                 # VCF Automation
+                                                 "VRA",
+                                                 # Components that comprise a VCF Instance
+                                                 "VCENTER",
                                                  "NSX_T_MANAGER",
                                                  "SDDC_MANAGER"})
 print("Retrieved product release components")

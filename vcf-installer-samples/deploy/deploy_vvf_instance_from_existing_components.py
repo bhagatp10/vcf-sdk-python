@@ -1,15 +1,9 @@
-"""
-* *******************************************************
-* Copyright (c) 2025 Broadcom. All rights reserved.
-* The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
-* *******************************************************
-*
-* DISCLAIMER. THIS PROGRAM IS PROVIDED TO YOU "AS IS" WITHOUT
-* WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER ORAL OR WRITTEN,
-* EXPRESS OR IMPLIED. THE AUTHOR SPECIFICALLY DISCLAIMS ANY IMPLIED
-* WARRANTIES OR CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY,
-* NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
-"""
+#!/usr/bin/env python
+
+# Copyright (c) 2025-2026 Broadcom. All Rights Reserved.
+# The term "Broadcom" refers to Broadcom Inc.
+# and/or its subsidiaries.
+# SPDX-License-Identifier: Apache-2.0
 
 import argparse
 
@@ -19,7 +13,8 @@ from utils.ssl_helper import get_ssl_cert_thumbprint
 from utils.sddc_spec_util import WorkflowType, VERSION, \
     create_vcf_operations_spec, hostname_to_fqdn, \
     AUTO_GENERATED_PASSWORD, create_sddc_vcenter_spec, CLUSTER_NAME, \
-    CLUSTER_DATACENTER_NAME, save_sddc_spec_to_file
+    CLUSTER_DATACENTER_NAME, save_sddc_spec_to_file, create_vsp_cluster_spec, create_vsp_ipv4_pool, \
+    create_vsp_ipv6_pool, create_license_server_spec
 from utils.client import create_vcf_installer_client
 from utils.sddc_task_util import poll_sddc_validation_status, \
     poll_sddc_deployment_status
@@ -29,6 +24,7 @@ from utils.misc_util import parse_bool_or_str, \
 """
 Description:
 Demonstrates how to deploy new VVF Instance, reusing existing Vcenter.
+In addition to that deploy VSP components.
 Prerequisites for successful deployment:
     1. Existing components need to be configured and reachable by the VCF Installer appliance
     2. All provided hostnames must be resolvable from the VCF Installer appliance
@@ -128,6 +124,107 @@ parser.add_argument(
     VCF Installer during deployment.
     """)
 
+parser.add_argument(
+    "--vsp_platform_fqdn",
+    required=True,
+    help="VCF Services Platform FQDN.")
+
+parser.add_argument(
+    "--vsp_ipv4_cidr",
+    help="VCF Services Platform IPv4 CIDR. All IPv4 fields are optional, "
+         "however IPv4Pool is required for the VCF Services Platform cluster spec. "
+         "Either provide vsp_ipv4_addresses or provide "
+         "vsp_ipv4_cidr, or vsp_ipv4_start_ip_address and vsp_ipv4_end_ip_address.")
+
+parser.add_argument(
+    "--vsp_ipv4_start_ip_address",
+    help="VCF Services Platform IPv4 start ip address. All IPv4 fields are optional,"
+         "however IPv4Pool is required for the VCF Services Platform cluster spec."
+         "Either provide vsp_ipv4_addresses or provide"
+         "vsp_ipv4_cidr, or vsp_ipv4_start_ip_address and vsp_ipv4_end_ip_address.")
+
+parser.add_argument(
+    "--vsp_ipv4_end_ip_address",
+    help="VCF Services Platform IPv4 end ip address. All IPv4 fields are optional,"
+         "however IPv4Pool is required for the VCF Services Platform cluster spec."
+         "Either provide vsp_ipv4_addresses or provide"
+         "vsp_ipv4_cidr, or vsp_ipv4_start_ip_address and vsp_ipv4_end_ip_address.")
+
+parser.add_argument(
+    "--vsp_ipv4_addresses",
+    help="VCF Services Platform IPv4 ip addresses. All IPv4 fields are optional,"
+         "however IPv4Pool is required for the VCF Services Platform cluster spec."
+         "Either provide vsp_ipv4_addresses or provide"
+         "vsp_ipv4_cidr, or vsp_ipv4_start_ip_address and vsp_ipv4_end_ip_address.")
+
+parser.add_argument(
+    "--vsp_ipv4_excluded_addresses",
+    help="VCF Services Platform IPv4 excluded addresses.")
+
+parser.add_argument(
+    "--vsp_ipv6_cidr",
+    help="VCF Services Platform IPv6 CIDR. All IPv6 fields are optional, "
+         "however IPv6Pool is required for the VCF Services Platform cluster spec. "
+         "Either provide vsp_ipv6_addresses or provide "
+         "vsp_ipv6_cidr, or vsp_ipv6_start_ip_address and vsp_ipv6_end_ip_address.")
+
+parser.add_argument(
+    "--vsp_ipv6_start_ip_address",
+    help="VCF Services Platform IPv6 start ip address. All IPv6 fields are optional,"
+         "however IPv6Pool is required for the VCF Services Platform cluster spec."
+         "Either provide vsp_ipv6_addresses or provide"
+         "vsp_ipv6_cidr, or vsp_ipv6_start_ip_address and vsp_ipv6_end_ip_address.")
+
+parser.add_argument(
+    "--vsp_ipv6_end_ip_address",
+    help="VCF Services Platform IPv6 end ip address. All IPv6 fields are optional,"
+         "however IPv6Pool is required for the VCF Services Platform cluster spec."
+         "Either provide vsp_ipv6_addresses or provide"
+         "vsp_ipv6_cidr, or vsp_ipv6_start_ip_address and vsp_ipv6_end_ip_address.")
+
+parser.add_argument(
+    "--vsp_ipv6_addresses",
+    help="VCF Services Platform IPv6 ip addresses. All IPv6 fields are optional,"
+         "however IPv6Pool is required for the VCF Services Platform cluster spec."
+         "Either provide vsp_ipv6_addresses or provide"
+         "vsp_ipv6_cidr, or vsp_ipv6_start_ip_address and vsp_ipv6_end_ip_address.")
+
+parser.add_argument(
+    "--vsp_ipv6_excluded_addresses",
+    help="VCF Services Platform IPv6 excluded addresses.")
+
+parser.add_argument(
+    "--vsp_size",
+    help="VCF Services Platform size.")
+
+parser.add_argument(
+    "--vsp_internal_cluster_cidr_ipv4",
+    help="VCF Services Platform internal cluster CIDR IPv4.")
+
+parser.add_argument(
+    "--vsp_internal_cluster_cidr_ipv6",
+    help="VCF Services Platform internal cluster CIDR IPv6.")
+
+parser.add_argument(
+    "--vsp_instance_fqdn",
+    required=True,
+    help="VCF Services Platform instance FQDN.")
+
+parser.add_argument(
+    "--vsp_fleet_fqdn",
+    help="VCF Services Platform cluster fleet FQDN."
+         "This should be provided in VVF and primary VCF instance."
+         "If building a secondary VCF instance, do not provide this field.")
+
+parser.add_argument(
+    "--license_server_hostname",
+    required=True,
+    help="License server hostname.")
+
+parser.add_argument(
+    "--license_server_use_existing_deployment",
+    help="License server use existing deployment.")
+
 args = parser.parse_args()
 server = args.vcf_installer_fqdn
 password = args.vcf_installer_admin_password
@@ -165,6 +262,31 @@ def create_sddc_spec_for_new_vvf_instance_with_existing_vc(vcf_client, args):
     spec.cluster_spec = model_client.SddcClusterSpec(CLUSTER_NAME.format(
         args.sddc_id), CLUSTER_DATACENTER_NAME.format(args.sddc_id))
     spec.sddc_id = args.sddc_id
+
+    vsp_cluster_ipv4_pool = create_vsp_ipv4_pool(args.vsp_ipv4_cidr,
+                                                 args.vsp_ipv4_start_ip_address,
+                                                 args.vsp_ipv4_end_ip_address,
+                                                 args.vsp_ipv4_addresses,
+                                                 args.vsp_ipv4_excluded_addresses)
+
+    vsp_cluster_ipv6_pool = create_vsp_ipv6_pool(args.vsp_ipv6_cidr,
+                                                 args.vsp_ipv6_start_ip_address,
+                                                 args.vsp_ipv6_end_ip_address,
+                                                 args.vsp_ipv6_addresses,
+                                                 args.vsp_ipv6_excluded_addresses)
+
+    spec.vsp_cluster_spec = create_vsp_cluster_spec(args.vsp_platform_fqdn,
+                                                    vsp_cluster_ipv4_pool,
+                                                    vsp_cluster_ipv6_pool,
+                                                    args.vsp_size,
+                                                    args.vsp_internal_cluster_cidr_ipv4,
+                                                    args.vsp_internal_cluster_cidr_ipv6,
+                                                    args.vsp_instance_fqdn,
+                                                    args.vsp_fleet_fqdn)
+
+    spec.license_server_spec = create_license_server_spec(args.license_server_hostname,
+                                                          args.license_server_use_existing_deployment,
+                                                          None)
 
     return spec
 

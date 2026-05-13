@@ -13,6 +13,10 @@
         - [Run SDDC Manager Samples](#run-sddc-manager-samples)
         - [Run vSphere Samples](#run-vsphere-samples)
         - [Run VCF Installer Samples](#run-vcf-installer-samples)
+        - [Run VCF Operations samples](#run-vcf-operations-samples)
+            - [Operations samples](#operations-samples)
+            - [Log Management samples](#log-management-samples)
+            - [Operations for Networks samples](#operations-for-networks-samples)
     - [IDE Support](#ide-support)
 - [API Documentation](#api-documentation)
 - [SDK Support](#sdk-support)
@@ -26,25 +30,31 @@ This document describes the VMware Cloud Foundation Python SDK samples that use 
 All modules of the VCF SDK for Python are compatible and verified with the supported versions of Python at the time of their release.
 Once a Python version reaches EOL (End-Of-Life), it no longer receives security patches. VCF SDK releases which happen after this moment will not provide compatibility guarantees for the EOL-ed Python version. As a generally good practice and for best security posture, it is recommended to use the VCF SDK with an actively maintained version of Python and keeping your environment on the latest patch provided by the Python Software Foundation (PSF).
 
-For release 9.0.0.0, the compatible Python versions are [3.9](https://www.python.org/downloads/release/python-390/), [3.10](https://www.python.org/downloads/release/python-3100/), [3.11](https://www.python.org/downloads/release/python-3110/), [3.12](https://www.python.org/downloads/release/python-3120/) and [3.13](https://www.python.org/downloads/release/python-3130/).
+For release 9.1.0.0, the compatible Python versions are [3.10](https://www.python.org/downloads/release/python-3100/), [3.11](https://www.python.org/downloads/release/python-3110/), [3.12](https://www.python.org/downloads/release/python-3120/) and [3.13](https://www.python.org/downloads/release/python-3130/) and [3.14](https://www.python.org/downloads/release/python-3142/).
 
 ### VCF Component Compatibility
 The SDK is compatible with following VMware Cloud Foundation components
 
 - VMware Cloud Foundation
-    - pyVmomi (includes vSAN) 8.0 and 9.0
-    - vCenter 8.0 and 9.0
-    - VMware vSAN Data Protection 8.0 and 9.0
-    - SDDC Manager 9.0
-    - VCF Installer 9.0
+    - pyVmomi (includes vSAN) 8.0, 9.0 and 9.1
+    - vCenter 8.0, 9.0 and 9.1
+    - VMware vSAN Data Protection 8.0, 9.0 and 9.1
+    - SDDC Manager 9.0 and 9.1
+    - VCF Installer 9.0 and 9.1
+    - NSX 9.1
+    - VCF Operations 9.1
+    - VCF Operations for Networks 9.1
+    - Log Management 9.1
+    - Fleet Lifecycle 9.1
+    - SDDC Lifecycle 9.1
 
 Kindly refer to README.md under each sample package and the [DocStrings](https://peps.python.org/pep-0257/#what-is-a-docstring) in the sample for detailed product compatibility information.
 
 # Quick Start Guide
 ## Prepare a Python Development Environment
-We recommend to install a [Python](http://docs.python-guide.org/en/latest/starting/installation/) supported version ([3.9](https://www.python.org/downloads/release/python-390/) to [3.13](https://www.python.org/downloads/release/python-3130/)) and a compatible [pip](https://pypi.python.org/pypi/pip/) on your system.
+We recommend to install a [Python](http://docs.python-guide.org/en/latest/starting/installation/) supported version ([3.10](https://www.python.org/downloads/release/python-3100/) to [3.14](https://www.python.org/downloads/release/python-3142/)) and a compatible [pip](https://pypi.python.org/pypi/pip/) on your system.
 
-***NOTE:*** [latest pip version](https://pypi.org/project/pip/) is compatible with all the Python versions supported by the SDK.
+***NOTE:*** [pip version 25.3](https://pypi.org/project/pip/25.3/) is compatible with all the Python versions supported by the SDK.
 
 A Python virtual environment is also highly recommended.
 * [Install a virtual env for Python 3](https://docs.python.org/3/tutorial/venv.html)
@@ -54,7 +64,7 @@ The SDK package installation commands vary depending on the component being inst
 
 ### Prerequisites
 - The SDK requires OpenSSL 3.0+ in order to support TLS 1.2 & 1.3.
-- *pip* and *setuptools* are common requirements for all installation types. It is recommended to upgrade *pip* and *setuptools* to the latest version.
+- *pip* and *setuptools* are common requirements for all installation types. It is recommended to upgrade *pip* to version [25.3](https://pypi.org/project/pip/25.3/) and *setuptools* to the latest version.
 
 Install/Update compatible pip from PyPI.
 ```shell
@@ -74,7 +84,7 @@ This is the recommended way to install the SDK. The installation gets the SDK li
 pip install vcf-sdk
 ```
 
-### 2. Install an Individual Component package from PyPI.
+### 2. Install an Individual VCF SDK Component package from PyPI.
 Individual VCF SDK components like SDDC Manager, VCF Installer etc, can be installed directly.
 ```shell
 pip install <COMPONENT_PACKAGE_NAME>
@@ -85,7 +95,7 @@ To get list of other VCF SDK packages, refer to [requirements.txt](./requirement
 
 ### 2. Download and Install SDK from Broadcom Portal
 VCF SDK for Python is published to the [Broadcom Developer Portal](https://developer.broadcom.com/sdks/vcf-python-sdk/latest).
-The SDK zip file follows the naming convention `vcf-python-sdk-<VERSION>-<BUILD_NUMBER>.zip`.
+The SDK zip file follows the naming convention `vcf-sdk-python-<VERSION>-<BUILD_NUMBER>.zip`.
 
 where 
 
@@ -93,9 +103,9 @@ where
 
 `BUILD_NUMBER` : The build number of the released VCF SDK Python
 
-e.g. ``` vcf-python-sdk-9.0.0.0-24798170.zip```
+e.g. ``` vcf-sdk-python-9.1.0.0-24798170.zip```
 
-The SDK zip bundles the SDK libraries, samples, and documentation. However, third-party dependency packages are not bundled; they are listed in the `requirements-third-party.txt` file included in [vcf-python-sdk-<VERSION>-<BUILD_NUMBER>.zip](https://developer.broadcom.com/sdks/vcf-python-sdk/latest)
+The SDK zip bundles the SDK libraries, samples, and documentation. However, third-party dependency packages are not bundled; they are listed in the `requirements-third-party.txt` file included in [vcf-sdk-python-<VERSION>-<BUILD_NUMBER>.zip](https://developer.broadcom.com/sdks/vcf-python-sdk/latest)
 
 To install the VCF SDK Python from the zip, follow these steps. 
 - Download the SDK zip from the trusted source [Broadcom Developer Portal](https://developer.broadcom.com/sdks/vcf-python-sdk/latest)
@@ -108,7 +118,7 @@ e.g.
 #### Unzip the SDK
 ```shell
 # unzip the SDK to vcf-sdk-python directory
-unzip vcf-python-sdk-9.0.0.0-24798170.zip -d vcf-sdk-python
+unzip vcf-sdk-python-9.1.0.0-24798170.zip -d vcf-sdk-python
 cd vcf-sdk-python
 ```
 #### Install Third Party dependencies
@@ -143,7 +153,7 @@ The required SDK packages are listed in the [requirements.txt](./requirements.tx
     e.g.
     ```shell
     # Unzip the VCF SDK zip
-    unzip vcf-python-sdk-9.0.0.0-24798170.zip -d vcf-sdk-python
+    unzip vcf-sdk-python-9.1.0.0-24798170.zip -d vcf-sdk-python
     cd vcf-sdk-python
     # Download third party dependencies from PyPI
     pip download -r requirements-third-party.txt -d pypi/
@@ -168,8 +178,8 @@ The required SDK packages are listed in the [requirements.txt](./requirements.tx
 
     e.g.
     ```shell
-    wget https://github.com/vmware/vcf-sdk-python/archive/refs/tags/v9.0.0.0.zip
-    unzip v9.0.0.0.zip -d vcf-sdk-python
+    wget https://github.com/vmware/vcf-sdk-python/archive/refs/tags/v9.1.0.0.zip
+    unzip v9.1.0.0.zip -d vcf-sdk-python
     cd vcf-sdk-python
     pip download -r requirements.txt -d pypi/
     cd ..
@@ -228,7 +238,7 @@ Refer to [SDK Installation](#sdk-installation) to explore other installation opt
 ### 3. Update PYTHONPATH to use SDK samples and utilities
 Samples and utilities are organized as Python modules under each component's samples directory. The directory name follows the format:`<COMPONENT-NAME>-samples`.
 Where `<COMPONENT-NAME>` is the name of the VCF component e.g sddc-manager, vsphere etc.
-These directories are regular python packages. However, they are not installed via pip. Python will not be able to resolve the modules imported by the python samples under `<COMPONENT-NAME>-samples` directory, if run as is.
+These directories are regular python packages. However, they are not installed via pip. Python will not be able to resolve the modules imported by the python samples under `<COMPONENT-NAME>-samples` directory, if run as is.
 
 In order to make the modules discoverable by Python, update the environment variable `PYTHONPATH` with the location of `<COMPONENT-NAME>-samples` package.
 
@@ -249,21 +259,17 @@ e.g. For SDDC Manager Samples
 set PYTHONPATH=%cd%\sddc-manager-samples;%PYTHONPATH%
 ```
 #### 3.1 Update PYTHONPATH for vSphere Samples
-vSphere samples are present in two different directories [vsphere-automation-sdk](./vsphere-samples/vsphere-automation-sdk/) and [pyvmomi-community-samples](./vsphere-samples/pyvmomi-community-samples/).
 
-Update the environment variable `PYTHONPATH` with the location of `vsphere-samples/vsphere-automation-sdk` package for Python to discover the vSphere modules.
-
-**NOTE :** pyvmomi-community-samples have no modules. Do not update the `PYTHONPATH` to run samples under `vsphere-samples/pyvmomi-community-samples`
+Update the environment variable `PYTHONPATH` with the location of `vsphere-samples` package for Python to discover the vSphere modules.
 
 Linux/Mac:
 ```shell
 cd vcf-sdk-python
-export PYTHONPATH=${PWD}/vsphere-samples/vsphere-automation-sdk:$PYTHONPATH
+export PYTHONPATH=${PWD}/vsphere-samples:$PYTHONPATH
 ```
 Windows:
 ```shell
-cd vcf-sdk-python
-set PYTHONPATH=%cd%\vsphere-samples\vsphere-automation-sdk;%PYTHONPATH%
+set PYTHONPATH=%cd%\vsphere-samples;%PYTHONPATH%
 ```
 
 ### 4. Using the VCF SDK repository for connecting to the Server and samples execution
@@ -286,8 +292,8 @@ sddc_client.v1.Domains.get_domains()
 Output in a Python Interpreter:
 
 ```shell
-(venv)[vsphere-automation-sdk]$ python
-Python 3.9.8 (main, Nov 10 2021, 06:03:50)
+(venv)[vsphere-samples]$ python
+Python 3.12.8 (main, Nov 10 2025, 06:03:50)
 [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import requests
@@ -328,8 +334,8 @@ vsphere_client.vcenter.VM.list()
 Output in a Python Interpreter:
 
 ```shell
-(venv)[vsphere-automation-sdk]$ python
-Python 3.9.8 (main, Nov 10 2021, 06:03:50)
+(venv)[vsphere-samples]$ python
+Python 3.12.8 (main, Nov 10 2025, 06:03:50)
 [GCC 4.2.1 (Apple Inc. build 5666) (dot 3)] on darwin
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import requests
@@ -363,7 +369,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> from utils.client import create_vcf_installer_client
 >>> client = create_vcf_installer_client(server=<vcf_installer_ip>, password=<vcf_installer_admin_password>, ca_certs=False)
 >>> client.v1.system.ApplianceInfo.get_appliance_info()
-ApplianceInfo(role='VcfInstaller', version='9.0.0.0.24541873')
+ApplianceInfo(role='VcfInstaller', version='9.1.0.0.24541873')
 ```
 
 ## Run SDK Samples
@@ -377,13 +383,40 @@ $ python create_domains.py --server <SDDC_MANAGER IP> --user <username> --passwo
 ```
 
 ### Run vSphere Samples
-Follow the instructions from [vSphere Automation SDK guide](./vsphere-samples/vsphere-automation-sdk/README.md#run-sdk-samples)
+
+```shell
+$ python vcenter/compute/vm/list_vms.py -v
+```
 
 ### Run VCF Installer samples
 
 ```cmd
 $ python get_appliance_info.py --vcf_installer_server_address <VCF_INSTALLER_IP> --vcf_installer_admin_password <VCF_INSTALLER_ADMIN_PASSWORD>
 ```
+
+### Run VCF Operations samples
+
+#### Operations samples
+Before executing any operations samples, update the [client-config.json](./vcf-operations-samples/operations/json-config/client-config.json) file. Additionally, remember to update the configuration files specific to each sample; for example, update symptom-and-alert-definition-config.json for the symptoms_and_alert_definitions.py sample.
+
+```cmd
+$ python operations/symptomdefinitions/symptoms_and_alert_definitions.py operations/json-config/client-config.json operations/json-config/symptom-and-alert-definition-config.json
+```
+
+#### Log Management samples
+Update the [client-config.properties](./vcf-operations-samples/log_management/resources/client-config.properties) before executing the python sample
+
+```cmd
+$ python log_management/advanced_search/advanced_search_example.py
+```
+
+#### Operations for Networks samples
+
+```cmd
+$ python operations_networks/groups/applications.py --server <OPS_NETWORKS_IP>  --user <OPS_NETWORKS_USERNAME> --password <OPS_NETWORKS_PASSWORD>
+```
+
+
 ## IDE Support
 This project contains python samples from VCF products which can be imported to the supported IDEs. Some specifics of PyCharm and Visual Studio Code, two popular IDEs for Python are discussed in the following subsections.
 
@@ -414,6 +447,13 @@ You can run the sample from VS Code using two ways
 * [VMware vSphere REST API Reference documentation](https://developer.broadcom.com/xapis/vsphere-automation-api/latest/)
 * [vSphere Web Services API](https://developer.broadcom.com/xapis/vsphere-web-services-api/latest/)
 * [vSAN](https://developer.broadcom.com/xapis/vsan-management-api/latest/)
+* [SDDC Manager](#)
+* [VCF NSX](#)
+* [VCF Operations](#)
+* [VCF Operations Networks](#)
+* [VCF Log Management](#)
+* [VCF Fleet LCM](#)
+* [VCF SDDC LCM](#)
 
 ## SDK Support
 

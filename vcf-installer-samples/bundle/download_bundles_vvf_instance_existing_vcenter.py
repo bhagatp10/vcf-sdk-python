@@ -1,15 +1,10 @@
-"""
-* *******************************************************
-* Copyright (c) 2025 Broadcom. All rights reserved.
-* The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
-* *******************************************************
-*
-* DISCLAIMER. THIS PROGRAM IS PROVIDED TO YOU "AS IS" WITHOUT
-* WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER ORAL OR WRITTEN,
-* EXPRESS OR IMPLIED. THE AUTHOR SPECIFICALLY DISCLAIMS ANY IMPLIED
-* WARRANTIES OR CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY,
-* NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
-"""
+#!/usr/bin/env python
+
+# Copyright (c) 2025-2026 Broadcom. All Rights Reserved.
+# Broadcom Confidential. The term "Broadcom" refers to Broadcom Inc.
+# and/or its subsidiaries.
+# The term "Broadcom" refers to Broadcom Inc.
+# SPDX-License-Identifier: Apache-2.0
 
 import argparse
 
@@ -103,8 +98,21 @@ latest_product_release_components = download_bundles_util.get_latest_product_rel
     client=client,
     sku="VVF",
     release_version=version_without_build_number,
-    product_release_components_names_to_include={"VROPS"  # VCF Operations
-                                                 })
+    product_release_components_names_to_include={
+        # VCF Services Platform
+        "VSP",
+        # Telemetry acceptor component
+        "TELEMETRY_ACCEPTOR",
+        # VCF fleet lcm
+        "VCF_FLEET_LCM",
+        # Fleet depot service
+        "DEPOT_SERVICE",
+        # Fleet SDDC Lcm
+        "VCF_SDDC_LCM",
+        # License server component
+        "VCF_LICENSE_SERVER",
+        # VCF Operations
+        "VROPS"})
 print("Retrieved product release components")
 
 bundle_ids_being_downloaded = download_bundles_util.start_bundles_download(

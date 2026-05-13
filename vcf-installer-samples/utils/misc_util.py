@@ -1,15 +1,9 @@
-"""
-* *******************************************************
-* Copyright (c) 2025 Broadcom. All rights reserved.
-* The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
-* *******************************************************
-*
-* DISCLAIMER. THIS PROGRAM IS PROVIDED TO YOU "AS IS" WITHOUT
-* WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER ORAL OR WRITTEN,
-* EXPRESS OR IMPLIED. THE AUTHOR SPECIFICALLY DISCLAIMS ANY IMPLIED
-* WARRANTIES OR CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY,
-* NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
-"""
+#!/usr/bin/env python
+
+# Copyright (c) 2025 Broadcom. All Rights Reserved.
+# The term "Broadcom" refers to Broadcom Inc.
+# and/or its subsidiaries.
+# SPDX-License-Identifier: Apache-2.0
 
 import re
 import time

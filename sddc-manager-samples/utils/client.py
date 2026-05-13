@@ -1,15 +1,9 @@
-"""
-* *******************************************************
-* Copyright (c) 2025 Broadcom. All rights reserved.
-* The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
-* *******************************************************
-*
-* DISCLAIMER. THIS PROGRAM IS PROVIDED TO YOU "AS IS" WITHOUT
-* WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER ORAL OR WRITTEN,
-* EXPRESS OR IMPLIED. THE AUTHOR SPECIFICALLY DISCLAIMS ANY IMPLIED
-* WARRANTIES OR CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY,
-* NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
-"""
+#!/usr/bin/env python
+
+# Copyright (c) 2025 Broadcom. All Rights Reserved.
+# The term "Broadcom" refers to Broadcom Inc.
+# and/or its subsidiaries.
+# SPDX-License-Identifier: Apache-2.0
 
 import requests
 
@@ -85,16 +79,21 @@ def create_sddc_manager_client(server=None,
                                refresh_token=None,
                                session=None):
     """
-    Helper method to create an instance of the VMC API client using the public
-    VMC and CSP URL.
+    Helper method to create an instance of the SDDCManagerClient.
 
+    :type  server: :class:`str`
+    :param server: SDDC Manager host name or IP address
+    :type  username: :class:`str`
+    :param username: SDDC Manager username
+    :type  password: :class:`str`
+    :param password: SDDC Manager password
     :type  refresh_token: :class:`str`
-    :param refresh_token: Refresh token obtained from CSP
+    :param refresh_token: Refresh token obtained from TokenService
     :type  session: :class:`requests.Session` or ``None``
     :param session: Requests HTTP session instance. If not specified, then one
         is automatically created and used
-    :rtype: :class:`vmware.vapi.vmc.client.VmcClient`
-    :return: VMC Client instance
+    :rtype: :class:`utils.client.SDDCManagerClient`
+    :return: SDDCManagerClient instance
     """
     session = session or requests.Session()
     return SDDCManagerClient(session=session,

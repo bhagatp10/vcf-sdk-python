@@ -1,15 +1,10 @@
-"""
-* *******************************************************
-* Copyright (c) 2025 Broadcom. All rights reserved.
-* The term "Broadcom" refers to Broadcom Inc. and/or its subsidiaries.
-* *******************************************************
-*
-* DISCLAIMER. THIS PROGRAM IS PROVIDED TO YOU "AS IS" WITHOUT
-* WARRANTIES OR CONDITIONS OF ANY KIND, WHETHER ORAL OR WRITTEN,
-* EXPRESS OR IMPLIED. THE AUTHOR SPECIFICALLY DISCLAIMS ANY IMPLIED
-* WARRANTIES OR CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY,
-* NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
-"""
+#!/usr/bin/env python
+
+# Copyright (c) 2025-2026 Broadcom. All Rights Reserved.
+# Broadcom Confidential. The term "Broadcom" refers to Broadcom Inc.
+# and/or its subsidiaries.
+# The term "Broadcom" refers to Broadcom Inc.
+# SPDX-License-Identifier: Apache-2.0
 
 import argparse
 
@@ -106,11 +101,35 @@ latest_product_release_components = download_bundles_util.get_latest_product_rel
     client=client,
     sku="VCF",
     release_version=version_without_build_number,
-    product_release_components_names_to_include={"VRSLCM",  # VCF Operations Fleet Management
-                                                 "VROPS",  # VCF Operations
-                                                 "VCF_OPS_CLOUD_PROXY",  # VCF Operations Collector
-                                                 "VRA",  # VCF Automation
-                                                 "SDDC_MANAGER"})
+    product_release_components_names_to_include={
+        # VCF Services Platform
+        "VSP",
+        # VCF fleet lifecycle management
+        "VCF_FLEET_LCM",
+        # VCF fleet SDDC lifecycle management
+        "VCF_SDDC_LCM",
+        # SALT raas vmsp component
+        "VCF_SALT_RAAS",
+        # SALT master vmsp component
+        "VCF_SALT",
+        # Telemetry acceptor component
+        "TELEMETRY_ACCEPTOR",
+        # Fleet depot service component
+        "DEPOT_SERVICE",
+        # VCF Identity Broker component
+        "VIDB",
+        # Migration service engine
+        "VCF_SERVICE_VCD_MIGRATION_BACKEND",
+        # License server component
+        "VCF_LICENSE_SERVER",
+        # VCF Operations
+        "VROPS",
+        # VCF Operations Collector
+        "VCF_OPS_CLOUD_PROXY",
+        # VCF Automation
+        "VRA",
+        # Components that comprise a VCF Instance in this scenario
+        "SDDC_MANAGER"})
 print("Retrieved product release components")
 
 bundle_ids_being_downloaded = download_bundles_util.start_bundles_download(
